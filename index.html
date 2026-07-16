@@ -22,7 +22,7 @@
         @media print {
             @page { size: A4 landscape; margin: 10mm; }
             body { 
-                zoom: 0.65; /* Ajuste de escala para que quepa bien en A4 horizontal */
+                zoom: 0.65; 
                 background: white !important; 
                 color: black;
                 -webkit-print-color-adjust: exact !important; 
@@ -31,21 +31,18 @@
             .print-hidden { display: none !important; }
             .break-inside-avoid { page-break-inside: avoid; break-inside: avoid; }
             
-            /* FUERZA A EXPANDIR TODOS LOS CONTENEDORES CON SCROLL (Listas) */
             .overflow-y-auto, .overflow-x-auto {
                 overflow: visible !important;
                 height: auto !important;
                 max-height: none !important;
             }
 
-            /* QUITA ALTURAS FIJAS PARA PERMITIR EXPANSIÓN VERTICAL EN IMPRESIÓN */
-            .h-32, .h-\[460px\], .min-h-\[350px\], .max-h-40, .h-full, .flex-1, .max-h-\[600px\] {
+            .h-32, .h-\[460px\], .min-h-\[350px\], .max-h-40, .h-full, .flex-1, .max-h-\[600px\], .max-h-\[300px\] {
                 height: auto !important;
                 min-height: 0 !important;
                 max-height: none !important;
             }
 
-            /* MANTIENE LAS GRILLAS EN MODO HORIZONTAL EN LUGAR DE APILARLAS */
             .lg\:grid-cols-3 {
                 display: grid !important;
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -68,7 +65,6 @@
                 grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
             }
 
-            /* AJUSTE PARA GRÁFICOS */
             canvas {
                 max-width: 100% !important;
                 height: auto !important;
@@ -80,7 +76,6 @@
 <body class="bg-slate-50 text-slate-800 min-h-screen">
 
     <div id="app" class="flex flex-col min-h-screen">
-        <!-- HEADER -->
         <header class="print-hidden bg-slate-900 text-white shadow-md border-b border-slate-800 px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
                 <div class="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
@@ -150,7 +145,6 @@
                 </div>
             </div>
 
-            <!-- GRILLA DE KPIs -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 break-inside-avoid">
                 
                 <!-- IMPORTACIONES POR RECIBIR -->
@@ -189,10 +183,13 @@
 
                 <!-- POR REPARAR -->
                 <div class="bg-white p-5 rounded-xl border border-amber-100 shadow-sm flex flex-col justify-between">
-                    <p class="text-sm font-bold uppercase tracking-wider text-slate-400">Pares a Reparar</p>
-                    <div class="flex items-end gap-2 mt-1">
-                        <h3 id="kpi-reparar" class="text-4xl font-extrabold text-amber-600">0</h3>
-                        <p class="text-xs text-amber-500 font-semibold mb-1 flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> Pendientes</p>
+                    <div>
+                        <p class="text-sm font-bold uppercase tracking-wider text-slate-400">Pares a Reparar</p>
+                        <div class="flex items-end gap-2 mt-1">
+                            <h3 id="kpi-reparar" class="text-4xl font-extrabold text-amber-600">0</h3>
+                            <p class="text-xs text-amber-500 font-semibold mb-1 flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> Pendientes</p>
+                        </div>
+                        <p id="kpi-reparar-promedio" class="text-xs font-bold text-amber-500 mt-1">Tiempo promedio -- días</p>
                     </div>
                     <div class="mt-4 bg-amber-50/50 rounded-lg p-4 border border-amber-50 h-32 overflow-y-auto">
                         <div id="kpi-reparar-marcas" class="space-y-2 pr-1"></div>
@@ -330,7 +327,7 @@
                 </div>
             </div>
             
-            <!-- ALERTAS DE ORDEN DE COMPRA (ASCENDENTE Y COMPACTAS) -->
+            <!-- ALERTAS DE ORDEN DE COMPRA -->
             <div class="bg-white p-6 rounded-xl border border-rose-200 shadow-sm mt-6 break-inside-avoid">
                 <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-3">
@@ -344,13 +341,23 @@
                 <div id="container-alertas-meses" class="flex flex-col gap-6 mt-4"></div>
             </div>
 
-            <!-- INDICADORES DE CUMPLIMIENTO POR MES -->
+            <!-- INDICADORES DE CUMPLIMIENTO POR MES CON BUSCADOR GLOBAL -->
             <div class="bg-white p-6 rounded-xl border border-indigo-100 shadow-sm mt-6 break-inside-avoid print-hidden">
-                <div class="flex items-center gap-3 border-b border-slate-100 pb-3 mb-5">
-                    <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="target" class="w-5 h-5"></i></span>
-                    <div>
-                        <h3 class="font-extrabold text-slate-900 text-base uppercase">Indicadores de Cumplimiento por Mes</h3>
-                        <p class="text-sm text-slate-500">Detalle del estatus agrupado por Cliente y O.C. Usa el buscador en cada mes para ubicar una Orden específica rápidamente.</p>
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="target" class="w-5 h-5"></i></span>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base uppercase">Indicadores de Cumplimiento por Mes</h3>
+                            <p class="text-sm text-slate-500">Detalle del estatus agrupado por Cliente y O.C.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- BUSCADOR GLOBAL DE OC -->
+                    <div class="w-full md:w-80">
+                        <div class="relative">
+                            <input type="text" oninput="filtrarOCGlobal(this)" placeholder="Búsqueda Global de O.C..." class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block pl-10 pr-3 py-2 outline-none shadow-sm transition font-bold placeholder-slate-400">
+                            <i data-lucide="search" class="w-5 h-5 text-indigo-500 absolute left-3 top-2"></i>
+                        </div>
                     </div>
                 </div>
                 <div id="container-indicadores-meses" class="flex flex-col gap-8"></div>
@@ -442,12 +449,11 @@
             if (toast) {
                 document.getElementById('toast-msg').innerText = message;
                 document.getElementById('toast-icon').innerHTML = type === "success" ? '<i data-lucide="check" class="w-5 h-5 text-emerald-400"></i>' : (type === "error" ? '<i data-lucide="alert-circle" class="w-5 h-5 text-rose-400"></i>' : '<i data-lucide="info" class="w-5 h-5 text-blue-400"></i>');
-                if (window.lucide) lucide.createIcons();
+                lucide.createIcons();
                 toast.classList.remove('hidden'); setTimeout(() => toast.classList.add('hidden'), 4500);
             }
         }
 
-        // --- CONEXIÓN DIRECTA GVIZ ---
         async function sincronizarDesdeDrive() {
             const btnSync = document.getElementById('btn-drive');
             const iconSync = document.getElementById('icon-sync');
@@ -474,7 +480,7 @@
 
             } catch (error) {
                 console.error(">>> DETALLE TÉCNICO DEL ERROR PARA SISTEMAS <<<", error);
-                alert("SISTEMAS:\nPresiona F12 y revisa la pestaña 'Console' (Consola) para ver el error exacto.\n\nEs probable que sea un Bloqueo de CORS del navegador provocado por ejecutar este sistema como un archivo local (file:///).\nSolución: Alojar este HTML en un servidor web interno o GitHub Pages.");
+                alert("SISTEMAS:\nPresiona F12 y revisa la pestaña 'Console' (Consola) para ver el error exacto.\n\nEs probable que sea un Bloqueo de CORS del navegador provocado por ejecutar este sistema como un archivo local (file:///).\nSolución: Alojar este HTML en un servidor web interno.");
                 showToast("Error de conexión. Consulta consola (F12).", "error");
             } finally {
                 btnSync.classList.remove('opacity-70');
@@ -482,7 +488,6 @@
             }
         }
 
-        // --- FUNCIONES DE MAPEO DE DATOS ---
         function mapearFilaReparacion(row) {
             let statusRaw = getCSVValue(row, 'status', 'estado', 'estatus').toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             
@@ -529,7 +534,6 @@
             }
         }
 
-        // --- STREAMING_CHUNK:Procesamiento de Archivos y Cálculo de KPIs... ---
         function procesarDatosCSV(csvRep, csvDesp) {
             DB_REPARACIONES = [];
             DB_DESPACHOS = [];
@@ -584,7 +588,6 @@
             }
         }
 
-        // --- HERRAMIENTAS AUXILIARES ---
         function formatDateDDMMYYYY(dateObj) {
             if (!dateObj) return 'N/D';
             return dateObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -657,10 +660,9 @@
             renderIndicadoresCumplimiento();
             poblarFiltrosTabla();
             aplicarFiltrosTablaHistorica(); 
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
         }
 
-        // --- CÁLCULO GENERAL Y TARJETAS KPIs ---
         function calcularKPIsGlobales() {
             let reparando = 0, enProceso = 0, calidad = 0, buenEstado = 0, transito = 0, tRestaurados = 0, tZapateros = 0, tCadenas = 0;
             let totalDiasTallerGlobal = 0, totalParesTallerGlobal = 0;
@@ -696,7 +698,6 @@
                     dOK = parsearFecha(item.fecha_reparacion_por_mayor) || parsearFecha(item.fecha_retorno_averias);
                 }
 
-                // Pares Restaurados
                 if (sName === 'REPARADOS' && dOK && dOK.getFullYear() === currentYear) {
                     if(!minRet || dOK < minRet) minRet = new Date(dOK);
                     if(!maxRet || dOK > maxRet) maxRet = new Date(dOK);
@@ -730,7 +731,6 @@
                     tranMarca[objKey].pares += vPar;
                 }
                 
-                // Velocidad Taller Global
                 if (tEnv && tRet && !tMay) {
                     const start = parsearFecha(item.fecha_envio_averias);
                     const end = parsearFecha(item.fecha_retorno_averias);
@@ -774,6 +774,8 @@
             const tasaFijaDiaria = 1800;
             const diasEstTransito = transito > 0 ? (transito / tasaFijaDiaria).toFixed(1) : 0;
             const diasEstCalidadTotal = calidad > 0 ? (calidad / tasaFijaDiaria).toFixed(1) : 0;
+            const tasaDiariaReparacion = 52;
+            const diasEstReparar = reparando > 0 ? (reparando / tasaDiariaReparacion).toFixed(1) : 0;
 
             setInnerText('kpi-transito', transito.toLocaleString()); 
             setInnerText('kpi-reparar', reparando.toLocaleString());
@@ -785,6 +787,7 @@
             
             setInnerText('kpi-transito-promedio', `Tiempo promedio ${diasEstTransito} días`);
             setInnerText('kpi-calidad-promedio', `Tiempo promedio ${diasEstCalidadTotal} días`);
+            setInnerText('kpi-reparar-promedio', `Tiempo promedio ${diasEstReparar} días`);
 
             const globalTallerRate = totalDiasTallerGlobal > 0 ? Math.round(totalParesTallerGlobal / totalDiasTallerGlobal) : 0;
             setInnerText('kpi-tiempo', `${globalTallerRate} p/d`);
@@ -863,7 +866,6 @@
             });
         }
 
-        // --- ESTADÍSTICA DE EFICIENCIA MENSUAL (INTELIGENTE POR COLUMNA MES) ---
         function renderEficienciaMensual() {
             const container = document.getElementById('stats-mensual-balance');
             if (!container) return;
@@ -874,6 +876,7 @@
 
             DB_REPARACIONES.forEach(r => {
                 let m = (r.mes_texto || '').toLowerCase().trim();
+                
                 if (!m || !mesesIndex[m]) {
                     const dFecha = parsearFecha(r.fecha_entrega_orden, true);
                     if (dFecha) m = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][dFecha.getMonth()];
@@ -892,6 +895,7 @@
 
             DB_DESPACHOS.forEach(d => {
                 let m = (d.mes_texto || '').toLowerCase().trim();
+                
                 if (!m || !mesesIndex[m]) {
                     const dFecha = parsearFecha(d.fecha);
                     if (dFecha) m = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][dFecha.getMonth()];
@@ -918,6 +922,7 @@
 
             sortedKeys.forEach(sK => {
                 const mb = monthBalance[sK];
+                
                 if(mb.despachados === 0 && mb.reparados_ok === 0 && mb.por_reparar === 0) return;
 
                 if (mb.sortKey <= currentMonthNum) {
@@ -932,6 +937,7 @@
                 const isFuture = mb.sortKey > currentMonthNum;
                 
                 let targetPares = mb.reparados_ok > 0 ? mb.reparados_ok : mb.por_reparar; 
+
                 const pct = mb.despachados > 0 ? Math.round((targetPares / mb.despachados) * 100) : 0;
                 
                 let cardHTML = `
@@ -973,6 +979,7 @@
                         </div>
                     </div>
                 `;
+                
                 container.innerHTML += cardHTML;
             });
 
@@ -984,7 +991,6 @@
             document.getElementById('balance-subtitle').innerHTML = `Totales a la fecha: <span class="font-bold text-sky-600">Despachados: ${globalDespachados.toLocaleString()} p.</span> | <span class="font-bold text-emerald-600">Reparados: ${globalReparados.toLocaleString()} p.</span>`;
         }
 
-        // --- STREAMING_CHUNK:Renderizando Gráficos Mensuales y Ranking... ---
         function renderReparados() {
             if (chartReparadosObjs.length) chartReparadosObjs.forEach(c => c.destroy());
             chartReparadosObjs = [];
@@ -1109,7 +1115,6 @@
             });
         }
 
-        // --- STREAMING_CHUNK:Generando Resumen y Alertas... ---
         function renderResumenYAlertas() {
             const resumenMensual = {}; const alertasData = []; const rankingRepData = {}; 
             let fCounts = { 'REPARADOS':0, 'REVISAR CALIDAD':0, 'POR REPARAR':0, 'EN REPARACION':0, 'IMPORTACIONES EN TRANSITO POR REVISAR CALIDAD':0 };
@@ -1217,7 +1222,7 @@
                     cA.innerHTML += `<div class="col-span-full border-b border-slate-200 mt-4 pb-2"><h4 class="text-base font-bold text-slate-700 tracking-wider"><i data-lucide="calendar" class="w-5 h-5 inline-block mr-2"></i> ENTREGA: ${gData.mes}</h4></div>`;
                     
                     const gridCont = document.createElement('div');
-                    gridCont.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"; // Compact design 4 columns
+                    gridCont.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"; // 4 Columnas para hacerlas compactas
                     const gItems = gData.items.sort((a,b) => a.dLeft - b.dLeft);
                     
                     gItems.forEach(o => {
@@ -1229,11 +1234,12 @@
                         }
                         const ptC = o.pTotal > 0 ? Math.round(((o.pTotal - (o.pRep + o.pTaller)) / o.pTotal)*100) : 0;
                         
+                        // Diseño de tarjeta más compacta (letras más pequeñas y padding reducido)
                         gridCont.innerHTML += `
-                        <div class="bg-white border ${bT} rounded-xl p-3 flex flex-col">
+                        <div class="bg-white border ${bT} rounded-xl p-4 flex flex-col">
                             <div class="flex justify-between items-start mb-2">
-                                <div><h4 class="font-bold text-sm text-slate-800">${o.orden}</h4><span class="text-[10px] font-bold text-slate-500 uppercase">${o.marca}</span></div>
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${pS} whitespace-nowrap">${pT}</span>
+                                <div><h4 class="font-bold text-sm text-slate-800">O.C. ${o.orden}</h4><span class="text-[10px] font-bold text-slate-500">${o.marca}</span></div>
+                                <span class="px-2 py-1 rounded text-[10px] font-bold ${pS} whitespace-nowrap">${pT}</span>
                             </div>
                             <div class="text-[11px] space-y-1 mb-2 flex-1">
                                 <div class="flex justify-between border-b border-slate-100 pb-1 mb-1"><span>Total OC:</span><span class="font-bold text-slate-800">${o.pTotal.toLocaleString()} p.</span></div>
@@ -1252,12 +1258,9 @@
             }
         }
 
-        // --- FUNCION DE FILTRADO PARA MESES ---
-        function filtrarOCMes(inputElement, mesKey) {
-            const term = inputElement.value.toLowerCase().trim();
-            const container = document.getElementById(`month-container-${mesKey}`);
-            if (!container) return;
-
+        function aplicarFiltroEnContenedor(term, container) {
+            if (!container) return false;
+            let hasVisibleOCInMonth = false;
             const clientBlocks = container.querySelectorAll('.client-block');
             
             clientBlocks.forEach(block => {
@@ -1269,6 +1272,7 @@
                     if (ocText.includes(term)) {
                         row.classList.remove('hidden');
                         hasVisibleOC = true;
+                        hasVisibleOCInMonth = true;
                     } else {
                         row.classList.add('hidden');
                     }
@@ -1280,9 +1284,24 @@
                     block.classList.add('hidden');
                 }
             });
+            return hasVisibleOCInMonth;
         }
 
-        // --- STREAMING_CHUNK:Calculando Indicadores de Cumplimiento Mensual... ---
+        function filtrarOCGlobal(inputElement) {
+            const term = inputElement.value.toLowerCase().trim();
+            const mesesContainers = document.querySelectorAll('[id^="month-container-"]');
+
+            mesesContainers.forEach(container => {
+                const hasResults = aplicarFiltroEnContenedor(term, container);
+                // Ocultar el mes entero si no hay resultados en ese mes y se está buscando algo
+                if (term !== '' && !hasResults) {
+                    container.classList.add('hidden');
+                } else {
+                    container.classList.remove('hidden');
+                }
+            });
+        }
+
         function renderIndicadoresCumplimiento() {
             const container = document.getElementById('container-indicadores-meses');
             if (!container) return;
@@ -1297,7 +1316,7 @@
                 if (!limitD) return;
 
                 const mesKey = limitD.getFullYear() * 100 + limitD.getMonth();
-                if (mesKey < currentMonthKey) return; 
+                if (mesKey < currentMonthKey) return; // Solo mes actual y futuros
 
                 if (!dataMeses[mesKey]) {
                     dataMeses[mesKey] = {
@@ -1306,6 +1325,7 @@
                         buenEstado: {},
                         reparados: {},
                         revisarCalidad: {},
+                        transito: {},
                         porReparar: {},
                         enReparacion: {}
                     };
@@ -1321,13 +1341,18 @@
                 
                 let pBuenEstado = 0;
                 let pRevisarCalidad = 0;
+                let pTransito = 0;
                 let pReparados = 0;
                 let pPorReparar = 0;
                 let pEnReparacion = 0;
 
+                // FÓRMULAS EXACTAS
                 if (status === 'OK') {
                     pBuenEstado = pTotales; 
-                } else if (status === 'REVISAR CALIDAD' || status === 'IMPORTACIONES EN TRANSITO POR REVISAR CALIDAD') {
+                } else if (status === 'IMPORTACIONES EN TRANSITO POR REVISAR CALIDAD') {
+                    pTransito = pTotales; 
+                    pBuenEstado = 0;
+                } else if (status === 'REVISAR CALIDAD') {
                     pRevisarCalidad = pTotales; 
                     pBuenEstado = 0;
                 } else {
@@ -1350,6 +1375,7 @@
 
                 addDetail(dataMeses[mesKey].buenEstado, cliente, orden, marca, pBuenEstado);
                 addDetail(dataMeses[mesKey].revisarCalidad, cliente, orden, marca, pRevisarCalidad);
+                addDetail(dataMeses[mesKey].transito, cliente, orden, marca, pTransito);
                 addDetail(dataMeses[mesKey].reparados, cliente, orden, marca, pReparados);
                 addDetail(dataMeses[mesKey].porReparar, cliente, orden, marca, pPorReparar);
                 addDetail(dataMeses[mesKey].enReparacion, cliente, orden, marca, pEnReparacion);
@@ -1367,16 +1393,17 @@
                 const sumBuenEstado = Object.values(mes.buenEstado).reduce((acc, cli) => acc + cli.total, 0);
                 const sumReparados = Object.values(mes.reparados).reduce((acc, cli) => acc + cli.total, 0);
                 const sumCalidad = Object.values(mes.revisarCalidad).reduce((acc, cli) => acc + cli.total, 0);
+                const sumTransito = Object.values(mes.transito).reduce((acc, cli) => acc + cli.total, 0);
                 const sumPorReparar = Object.values(mes.porReparar).reduce((acc, cli) => acc + cli.total, 0);
                 const sumEnReparacion = Object.values(mes.enReparacion).reduce((acc, cli) => acc + cli.total, 0);
 
                 const pct = mes.totalPares > 0 ? (((sumBuenEstado + sumReparados) / mes.totalPares) * 100).toFixed(1) : 0;
 
-                // Nueva función de renderizado para soportar búsqueda y ocultar marcas en Buen Estado
                 const renderList = (segmentObj, hideMarca = false) => {
                     const clientes = Object.keys(segmentObj).sort();
                     return clientes.map(cli => {
                         const dataCli = segmentObj[cli];
+                        // Ordenar OCs numéricamente
                         const ocs = Object.keys(dataCli.ocs).sort((a,b) => {
                             const nA = parseInt(a.replace(/\D/g, '')) || 0;
                             const nB = parseInt(b.replace(/\D/g, '')) || 0;
@@ -1385,10 +1412,10 @@
                         const ocsHtml = ocs.map(o => {
                             const oData = dataCli.ocs[o];
                             const mStr = Array.from(oData.marcas).join(', ');
-                            const displayBrand = hideMarca ? '' : `<span class="opacity-70 ml-1">- ${mStr}</span>`;
-                            return `<div class="oc-row flex justify-between items-center text-[10px] pl-2 border-l-2 border-black/10 ml-1 my-0.5" data-oc="${o}">
-                                        <span class="truncate pr-1 text-slate-700 uppercase">${o} ${displayBrand}</span>
-                                        <span class="font-bold text-slate-800">${oData.pares.toLocaleString()} p.</span>
+                            const displayBrand = hideMarca ? '' : `<span class="opacity-70 ml-1 font-normal text-slate-500">- ${mStr}</span>`;
+                            return `<div class="oc-row flex justify-between items-center text-[10px] pl-2 border-l-2 border-black/10 ml-1 my-0.5 hover:bg-black/5" data-oc="${o}">
+                                        <span class="truncate pr-1 text-slate-700 font-extrabold uppercase">${o} ${displayBrand}</span>
+                                        <span class="font-extrabold text-slate-800 whitespace-nowrap pl-2">${oData.pares.toLocaleString()} p.</span>
                                     </div>`;
                         }).join('');
                         
@@ -1408,26 +1435,22 @@
                 container.innerHTML += `
                     <div id="month-container-${k}" class="flex flex-col border border-slate-200 rounded-xl overflow-hidden shadow-sm break-inside-avoid">
                         <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3">
-                                    <h4 class="text-lg font-extrabold text-slate-800 uppercase tracking-wide">${mes.mesStr}</h4>
-                                    <span class="bg-indigo-700 text-white font-extrabold px-2 py-1 rounded text-xs shadow-sm">${pct}%</span>
-                                </div>
-                                <p class="text-[11px] font-bold text-slate-500 mt-0.5 uppercase">Total de Pares Generales: <span class="text-indigo-600">${mes.totalPares.toLocaleString()} P.</span></p>
+                            <div>
+                                <h4 class="text-lg font-extrabold text-slate-800 uppercase tracking-wide">${mes.mesStr}</h4>
+                                <p class="text-[11px] font-bold text-slate-500 mt-0.5 uppercase">Total de Pares en General: <span class="text-indigo-600">${mes.totalPares.toLocaleString()} P.</span></p>
                             </div>
-                            <div class="w-full md:w-64 print-hidden">
-                                <div class="relative">
-                                    <input type="text" oninput="filtrarOCMes(this, '${k}')" placeholder="Buscar O.C. en este mes..." class="w-full bg-white border border-slate-300 text-slate-700 text-xs rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block pl-8 pr-3 py-2 outline-none shadow-sm transition">
-                                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2"></i>
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold text-slate-500 uppercase">Cumplimiento:</span>
+                                <span class="bg-indigo-700 text-white font-extrabold px-3 py-1.5 rounded-lg text-sm shadow-sm">${pct}%</span>
                             </div>
                         </div>
+                        
+                        <!-- 5 Columnas, apilando la última -->
                         <div class="p-4 bg-white grid grid-cols-1 md:grid-cols-5 gap-3">
                             <div class="bg-emerald-50/70 border border-emerald-100 rounded-lg p-3 h-full flex flex-col">
                                 <div class="flex justify-between text-xs font-extrabold text-emerald-700 mb-3 border-b border-emerald-200/50 pb-2">
                                     <span>BUEN ESTADO (OK)</span><span>${sumBuenEstado.toLocaleString()} p.</span>
                                 </div>
-                                <!-- Pasamos el flag 'true' para ocultar la marca en Buen Estado -->
                                 <div class="text-emerald-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.buenEstado, true)}</div>
                             </div>
                             <div class="bg-teal-50/70 border border-teal-100 rounded-lg p-3 h-full flex flex-col">
@@ -1442,17 +1465,27 @@
                                 </div>
                                 <div class="text-blue-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.revisarCalidad)}</div>
                             </div>
-                            <div class="bg-amber-50/70 border border-amber-100 rounded-lg p-3 h-full flex flex-col">
-                                <div class="flex justify-between text-xs font-extrabold text-amber-700 mb-3 border-b border-amber-200/50 pb-2">
-                                    <span>POR REPARAR</span><span>${sumPorReparar.toLocaleString()} p.</span>
+                            <div class="bg-purple-50/70 border border-purple-100 rounded-lg p-3 h-full flex flex-col">
+                                <div class="flex justify-between text-xs font-extrabold text-purple-700 mb-3 border-b border-purple-200/50 pb-2">
+                                    <span>EN TRÁNSITO</span><span>${sumTransito.toLocaleString()} p.</span>
                                 </div>
-                                <div class="text-amber-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.porReparar)}</div>
+                                <div class="text-purple-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.transito)}</div>
                             </div>
-                            <div class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 h-full flex flex-col">
-                                <div class="flex justify-between text-xs font-extrabold text-indigo-700 mb-3 border-b border-indigo-200/50 pb-2">
-                                    <span>EN REPARACION</span><span>${sumEnReparacion.toLocaleString()} p.</span>
+                            
+                            <!-- COLUMNA APILADA (Por Reparar y En Reparación) -->
+                            <div class="flex flex-col gap-3 h-full">
+                                <div class="bg-amber-50/70 border border-amber-100 rounded-lg p-3 flex-1 flex flex-col min-h-[150px]">
+                                    <div class="flex justify-between text-xs font-extrabold text-amber-700 mb-2 border-b border-amber-200/50 pb-2">
+                                        <span>POR REPARAR</span><span>${sumPorReparar.toLocaleString()} p.</span>
+                                    </div>
+                                    <div class="text-amber-800 space-y-0.5 flex-1 overflow-visible max-h-[300px] overflow-y-auto">${renderList(mes.porReparar)}</div>
                                 </div>
-                                <div class="text-indigo-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.enReparacion)}</div>
+                                <div class="bg-indigo-50/70 border border-indigo-100 rounded-lg p-3 flex-1 flex flex-col min-h-[150px]">
+                                    <div class="flex justify-between text-xs font-extrabold text-indigo-700 mb-2 border-b border-indigo-200/50 pb-2">
+                                        <span>EN REPARACION</span><span>${sumEnReparacion.toLocaleString()} p.</span>
+                                    </div>
+                                    <div class="text-indigo-800 space-y-0.5 flex-1 overflow-visible max-h-[300px] overflow-y-auto">${renderList(mes.enReparacion)}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1460,7 +1493,6 @@
             });
         }
 
-        // --- TABLA HISTÓRICA ---
         function poblarFiltrosTabla() {
             const m = [...new Set(DB_REPARACIONES.map(i => i.marca).filter(Boolean))].sort();
             const s = document.getElementById('filter-marca');
@@ -1510,7 +1542,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             const tE = document.getElementById('date-today');
             if (tE) tE.innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
-            if (window.lucide) lucide.createIcons();
+            lucide.createIcons();
         });
     </script>
 </body>
