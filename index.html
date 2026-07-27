@@ -18,7 +18,7 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* CONFIGURACIÓN AVANZADA DE IMPRESIÓN (A4 HORIZONTAL Y EXPANSIVO) */
+        /* CONFIGURACIÓN AVANZADA DE IMPRESIÓN */
         @media print {
             @page { size: A4 landscape; margin: 10mm; }
             body { 
@@ -43,32 +43,13 @@
                 max-height: none !important;
             }
 
-            .lg\:grid-cols-3 {
-                display: grid !important;
-                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 1.5rem !important;
-            }
-            .md\:grid-cols-2 {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-            .xl\:grid-cols-3 {
-                display: grid !important;
-                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-            }
-            .xl\:grid-cols-4 {
-                display: grid !important;
-                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-            }
-            .md\:grid-cols-5 {
-                display: grid !important;
-                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-            }
+            .lg\:grid-cols-3 { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 1.5rem !important; }
+            .md\:grid-cols-2 { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+            .xl\:grid-cols-3 { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+            .xl\:grid-cols-4 { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+            .md\:grid-cols-5 { display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
 
-            canvas {
-                max-width: 100% !important;
-                height: auto !important;
-            }
+            canvas { max-width: 100% !important; height: auto !important; }
             .bg-white { border: 1px solid #e2e8f0 !important; }
         }
     </style>
@@ -147,7 +128,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 break-inside-avoid">
                 
-                <!-- IMPORTACIONES POR RECIBIR -->
+                <!-- IMPORTACIONES POR RECIBIR (MES) -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
                     <div class="flex justify-between items-start">
                         <div>
@@ -215,7 +196,7 @@
                             <p class="text-sm font-bold uppercase tracking-wider text-slate-400">Velocidad Taller</p>
                             <div class="flex items-end gap-2 mt-1">
                                 <h3 id="kpi-tiempo" class="text-4xl font-extrabold text-purple-600">0 p/d</h3>
-                                <p class="text-xs text-purple-400 font-semibold mb-1">(Prom. Diario Global)</p>
+                                <p class="text-xs text-purple-400 font-semibold mb-1">(Prom. Diario Global - Sin Fines de Semana)</p>
                             </div>
                         </div>
                     </div>
@@ -223,12 +204,9 @@
                         <div id="kpi-tat-marcas" class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 pr-1"></div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- SECCIÓN CENTRAL (2 Columnas): Restaurados | Flujo -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 break-inside-avoid">
-                <!-- 1. Pares Restaurados (2 Columnas) -->
                 <div class="bg-white p-6 rounded-xl border border-emerald-200 shadow-sm flex flex-col h-full min-h-[350px] lg:col-span-2">
                     <p id="title-pares-restaurados" class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-1">Pares Restaurados</p>
                     <div class="flex items-end gap-2 mb-4">
@@ -254,7 +232,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Flujo de Trabajo (1 Columna, Derecha) -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col h-full min-h-[350px]">
                     <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-slate-100 pb-3 shrink-0">
                         <i data-lucide="pie-chart" class="w-5 h-5 text-emerald-500"></i> Flujo de Trabajo
@@ -265,7 +242,6 @@
                 </div>
             </div>
 
-            <!-- ESTADÍSTICA MENSUAL (EFICIENCIA DESPACHOS VS REPARADOS) -->
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mt-6 break-inside-avoid">
                 <div class="flex flex-col lg:flex-row justify-between lg:items-end border-b border-slate-100 pb-3 mb-5 gap-4">
                     <div>
@@ -283,9 +259,7 @@
                 </div>
             </div>
 
-            <!-- GRÁFICOS INFERIORES: Reparados Mensuales | Despachos | Ranking -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6 break-inside-avoid">
-                <!-- Gráficos Reparados -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col h-[460px]">
                     <div class="flex justify-between items-center mb-1 border-b border-slate-100 pb-2 shrink-0">
                         <h4 id="title-reparados-mes" class="font-bold text-slate-800 text-sm uppercase flex items-center gap-1">
@@ -301,7 +275,6 @@
                     </div>
                 </div>
                 
-                <!-- Gráficos Despachos -->
                 <div class="bg-white p-5 rounded-xl border border-sky-200 shadow-sm flex flex-col h-[460px]">
                     <div class="flex justify-between items-center mb-1 border-b border-slate-100 pb-2 shrink-0">
                         <h4 id="title-despachos-mes" class="font-bold text-slate-800 text-sm uppercase flex items-center gap-1">
@@ -317,7 +290,6 @@
                     </div>
                 </div>
 
-                <!-- Top Ranking -->
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col h-[460px]">
                     <h4 class="font-bold text-slate-800 text-sm uppercase flex items-center gap-2 mb-3 border-b border-slate-100 pb-3 shrink-0">
                         <i data-lucide="list-ordered" class="w-5 h-5 text-rose-500"></i> TOP MARCAS CON REPARACIONES
@@ -327,7 +299,7 @@
                 </div>
             </div>
             
-            <!-- ALERTAS DE ORDEN DE COMPRA -->
+            <!-- ALERTAS Y CUMPLIMIENTO -->
             <div class="bg-white p-6 rounded-xl border border-rose-200 shadow-sm mt-6 break-inside-avoid">
                 <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-3">
@@ -341,7 +313,6 @@
                 <div id="container-alertas-meses" class="flex flex-col gap-6 mt-4"></div>
             </div>
 
-            <!-- INDICADORES DE CUMPLIMIENTO POR MES CON BUSCADOR GLOBAL -->
             <div class="bg-white p-6 rounded-xl border border-indigo-100 shadow-sm mt-6 break-inside-avoid print-hidden">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
                     <div class="flex items-center gap-3">
@@ -352,7 +323,6 @@
                         </div>
                     </div>
                     
-                    <!-- BUSCADOR GLOBAL DE OC -->
                     <div class="w-full md:w-80">
                         <div class="relative">
                             <input type="text" oninput="filtrarOCGlobal(this)" placeholder="Búsqueda Global de O.C..." class="w-full bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block pl-10 pr-3 py-2 outline-none shadow-sm transition font-bold placeholder-slate-400">
@@ -363,7 +333,6 @@
                 <div id="container-indicadores-meses" class="flex flex-col gap-8"></div>
             </div>
 
-            <!-- TABLA HISTÓRICA -->
             <div class="print-hidden bg-white p-5 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4 items-end mt-6">
                 <div class="md:col-span-2">
                     <label class="block text-xs font-bold text-slate-500 mb-1.5">Búsqueda rápida en Histórico</label>
@@ -454,6 +423,9 @@
             }
         }
 
+        // NUEVO MÉTODO DE SINCRONIZACIÓN GOOGLE DRIVE:
+        // Descarga el Excel completo (.xlsx) en lugar de CSV separados.
+        // Esto garantiza que lea todas las pestañas incluyendo "Despachos".
         async function sincronizarDesdeDrive() {
             const btnSync = document.getElementById('btn-drive');
             const iconSync = document.getElementById('icon-sync');
@@ -461,27 +433,25 @@
             iconSync.classList.add('animate-spin');
             showToast("Conectando con Google Drive...", "info");
 
-            const urlRep = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRsm6e09zIl918Jsk0DNLvJBuLxRtqAoglvhQVcLZQ2DqLdB8dG4t1bJ_0XekHDk_Opo1yggCzmOBLf/pub?gid=1685925493&single=true&output=csv&t=${Date.now()}`;
-            const urlDesp = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRsm6e09zIl918Jsk0DNLvJBuLxRtqAoglvhQVcLZQ2DqLdB8dG4t1bJ_0XekHDk_Opo1yggCzmOBLf/pub?gid=1401791426&single=true&output=csv&t=${Date.now()}`;
+            const docId = '1R0EY-D3IE8h6vxX6Ar60UX4q3jVXtz7W-5ksPJmLZwE';
+            const urlXlsx = `https://docs.google.com/spreadsheets/d/${docId}/export?format=xlsx&t=${Date.now()}`;
 
             try {
-                const resRep = await fetch(urlRep);
-                if (!resRep.ok) throw new Error("Error HTTP: " + resRep.status);
-                const csvRep = await resRep.text();
-
-                let csvDesp = "";
-                try {
-                    const resDesp = await fetch(urlDesp);
-                    if (resDesp.ok) csvDesp = await resDesp.text();
-                } catch(e) { console.warn("Pestaña de Despachos no detectada"); }
-
-                procesarDatosCSV(csvRep, csvDesp);
+                const res = await fetch(urlXlsx);
+                if (!res.ok) throw new Error("Error HTTP al descargar XLSX: " + res.status);
+                
+                // Obtenemos el archivo completo como un Buffer
+                const buffer = await res.arrayBuffer();
+                
+                // Usamos la MISMA función robusta que se usa al subir un archivo local
+                procesarArrayBufferExcel(buffer);
+                
                 showToast("¡Sincronización con Drive exitosa!", "success");
 
             } catch (error) {
                 console.error(">>> DETALLE TÉCNICO DEL ERROR PARA SISTEMAS <<<", error);
-                alert("SISTEMAS:\nPresiona F12 y revisa la pestaña 'Console' (Consola) para ver el error exacto.\n\nEs probable que sea un Bloqueo de CORS del navegador provocado por ejecutar este sistema como un archivo local (file:///).\nSolución: Alojar este HTML en un servidor web interno.");
-                showToast("Error de conexión. Consulta consola (F12).", "error");
+                alert("ERROR DE CONEXIÓN A DRIVE:\n\n1. Verifica que el archivo en Drive tenga permisos: 'Cualquier persona con el enlace puede leer'.\n2. Si abres este archivo como local (file://), tu navegador podría bloquear la descarga (CORS). Súbelo a un servidor interno web o usa el botón 'Subir Excel Local'.");
+                showToast("Error de conexión. Consulta consola.", "error");
             } finally {
                 btnSync.classList.remove('opacity-70');
                 iconSync.classList.remove('animate-spin');
@@ -534,27 +504,6 @@
             }
         }
 
-        function procesarDatosCSV(csvRep, csvDesp) {
-            DB_REPARACIONES = [];
-            DB_DESPACHOS = [];
-
-            Papa.parse(csvRep, {
-                header: true, skipEmptyLines: true,
-                complete: function(results) { results.data.forEach(mapearFilaReparacion); }
-            });
-
-            if (csvDesp) {
-                Papa.parse(csvDesp, {
-                    header: true, skipEmptyLines: true,
-                    complete: function(results) { results.data.forEach(mapearFilaDespacho); }
-                });
-            }
-            
-            limpiarFiltrosTabla(false);
-            refrescarTodoElDashboard();
-            if(DB_REPARACIONES.length === 0 && DB_DESPACHOS.length === 0) showToast("No se encontraron registros válidos.", "error");
-        }
-
         function importarExcel(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -573,19 +522,51 @@
                     const snUpper = sheetName.toUpperCase();
                     const json = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {defval: "", raw: false});
                     if (json.length === 0) return;
-                    if (snUpper.includes('DESPACHO')) json.forEach(mapearFilaDespacho);
-                    else if (snUpper.includes('REPARACION') || snUpper.includes('FORMATO') || snUpper.includes('PORTAL')) json.forEach(mapearFilaReparacion);
+                    
+                    // Si el nombre de la pestaña contiene "DESPACHO", lo lee como despacho.
+                    // Cualquier otra pestaña con datos se leerá como Reparaciones base.
+                    if (snUpper.includes('DESPACHO')) {
+                        json.forEach(mapearFilaDespacho);
+                    } else {
+                        json.forEach(mapearFilaReparacion);
+                    }
                 });
 
                 if (document.getElementById('fileReparaciones')) document.getElementById('fileReparaciones').value = '';
                 limpiarFiltrosTabla(false);
                 refrescarTodoElDashboard();
-                if(DB_REPARACIONES.length === 0 && DB_DESPACHOS.length === 0) showToast("No se encontraron registros.", "error");
+                
+                if(DB_REPARACIONES.length === 0 && DB_DESPACHOS.length === 0) {
+                    showToast("No se encontraron registros válidos.", "error");
+                }
 
             } catch(err) {
                 console.error(err);
                 showToast("Error procesando los datos. Revisa el formato.", "error");
             }
+        }
+
+        function calcularDiasHabiles(fechaInicio, fechaFin) {
+            if (!fechaInicio || !fechaFin) return 0;
+            let start = new Date(fechaInicio);
+            let end = new Date(fechaFin);
+            
+            if (start > end) return 1; 
+            
+            start.setHours(0,0,0,0);
+            end.setHours(0,0,0,0);
+            
+            let diasHabiles = 0;
+            let current = new Date(start);
+            
+            while (current <= end) {
+                const diaDeLaSemana = current.getDay();
+                if (diaDeLaSemana !== 0 && diaDeLaSemana !== 6) { 
+                    diasHabiles++;
+                }
+                current.setDate(current.getDate() + 1);
+            }
+            return Math.max(1, diasHabiles); 
         }
 
         function formatDateDDMMYYYY(dateObj) {
@@ -597,7 +578,7 @@
             if (!str || str.trim() === '' || str.toLowerCase() === 'n/d') return 'N/D';
             if (str.includes(' - ')) {
                 const parts = str.split(' - ');
-                return `${formatDateDDMMYYYY(parsearFecha(parts[0]))} - ${formatDateDDMMYYYY(parsearFecha(parts[1]))}`;
+                return `${formatDateDDMMYYYY(parsearFecha(parts[0]))} - ${formatDateDDMMYYYY(parsearFecha(parts[1], true))}`;
             }
             const d = parsearFecha(str);
             return d ? formatDateDDMMYYYY(d) : str;
@@ -618,9 +599,13 @@
                     dateStr = tomarTope ? parts[parts.length - 1].trim() : parts[0].trim();
                 }
 
-                dateStr = dateStr.replace(/\//g, '-');
-                let match = dateStr.match(/^(\d{1,2})\-(\d{1,2})\-(\d{4})/);
-                if (match) return new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]));
+                dateStr = dateStr.replace(/[\/\.]/g, '-'); 
+                let match = dateStr.match(/^(\d{1,2})\-(\d{1,2})\-(\d{2,4})/);
+                if (match) {
+                    let year = parseInt(match[3]);
+                    if (year < 100) year += 2000;
+                    return new Date(year, parseInt(match[2]) - 1, parseInt(match[1]));
+                }
                 match = dateStr.match(/^(\d{4})\-(\d{1,2})\-(\d{1,2})/);
                 if (match) return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
 
@@ -667,7 +652,7 @@
             let reparando = 0, enProceso = 0, calidad = 0, buenEstado = 0, transito = 0, tRestaurados = 0, tZapateros = 0, tCadenas = 0;
             let totalDiasTallerGlobal = 0, totalParesTallerGlobal = 0;
             let repMarca = {}, buenMarca = {}, zapMarca = {}, cadMarca = {}, tatMarca = {}, proFecha = {}; 
-            let tranMarca = {}, calMarcaSolo = {}; 
+            let tranMeses = {}, calMarcaSolo = {}; 
             let minD = null, maxD = null;
             let minRet = null, maxRet = null;
 
@@ -713,6 +698,8 @@
                 }
 
                 if (sName === 'OK') { buenEstado += vPar; buenMarca[mar] = (buenMarca[mar]||0) + vPar; }
+                
+                // Importaciones (Agrupado Solo por Mes)
                 if (sName === 'IMPORTACIONES EN TRANSITO POR REVISAR CALIDAD') { 
                     transito += vPar; 
                     
@@ -724,18 +711,18 @@
                         sKey = dLimit.getFullYear() * 100 + dLimit.getMonth();
                     }
                     
-                    const labelUi = `${mesStr} - ${mar}`;
-                    const objKey = `${sKey}_${mar}`;
+                    const objKey = `${sKey}`; 
 
-                    if (!tranMarca[objKey]) tranMarca[objKey] = { label: labelUi, pares: 0, sortKey: sKey };
-                    tranMarca[objKey].pares += vPar;
+                    if (!tranMeses[objKey]) tranMeses[objKey] = { label: mesStr, pares: 0, sortKey: sKey };
+                    tranMeses[objKey].pares += vPar;
                 }
                 
+                // Cálculo Taller SIN Fines de Semana
                 if (tEnv && tRet && !tMay) {
                     const start = parsearFecha(item.fecha_envio_averias);
                     const end = parsearFecha(item.fecha_retorno_averias);
                     if (start && end) {
-                        const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / 86400000));
+                        const days = calcularDiasHabiles(start, end);
                         totalDiasTallerGlobal += days;
                         totalParesTallerGlobal += vRep;
 
@@ -771,11 +758,13 @@
                 setInnerText('title-pares-restaurados', `Pares Restaurados`);
             }
 
-            const tasaFijaDiaria = 1800;
+            const globalTallerRate = totalDiasTallerGlobal > 0 ? Math.round(totalParesTallerGlobal / totalDiasTallerGlobal) : 0;
+            const tasaFijaDiaria = 1800; 
             const diasEstTransito = transito > 0 ? (transito / tasaFijaDiaria).toFixed(1) : 0;
             const diasEstCalidadTotal = calidad > 0 ? (calidad / tasaFijaDiaria).toFixed(1) : 0;
-            const tasaDiariaReparacion = 52;
-            const diasEstReparar = reparando > 0 ? (reparando / tasaDiariaReparacion).toFixed(1) : 0;
+            
+            // Pares a reparar dividido por Velocidad Global de Taller
+            const diasEstReparar = (reparando > 0 && globalTallerRate > 0) ? (reparando / globalTallerRate).toFixed(1) : 0;
 
             setInnerText('kpi-transito', transito.toLocaleString()); 
             setInnerText('kpi-reparar', reparando.toLocaleString());
@@ -787,9 +776,8 @@
             
             setInnerText('kpi-transito-promedio', `Tiempo promedio ${diasEstTransito} días`);
             setInnerText('kpi-calidad-promedio', `Tiempo promedio ${diasEstCalidadTotal} días`);
-            setInnerText('kpi-reparar-promedio', `Tiempo promedio ${diasEstReparar} días`);
-
-            const globalTallerRate = totalDiasTallerGlobal > 0 ? Math.round(totalParesTallerGlobal / totalDiasTallerGlobal) : 0;
+            setInnerText('kpi-reparar-promedio', `Tiempo estimado: ${diasEstReparar} días (Base: ${globalTallerRate} p/d)`);
+            
             setInnerText('kpi-tiempo', `${globalTallerRate} p/d`);
 
             if (document.getElementById('date-range')) {
@@ -806,7 +794,7 @@
             const trList = document.getElementById('kpi-transito-marcas');
             if (trList) {
                 trList.innerHTML = '';
-                const itemsT = Object.values(tranMarca).sort((a,b) => a.sortKey - b.sortKey || a.label.localeCompare(b.label));
+                const itemsT = Object.values(tranMeses).sort((a,b) => a.sortKey - b.sortKey);
                 if (itemsT.length === 0) { trList.innerHTML = `<span class="text-xs text-slate-400 italic">Sin datos</span>`; }
                 itemsT.forEach(item => {
                     trList.innerHTML += `<div class="flex justify-between items-center text-[11px] border-b border-slate-100 pb-2 mb-2">
@@ -991,6 +979,7 @@
             document.getElementById('balance-subtitle').innerHTML = `Totales a la fecha: <span class="font-bold text-sky-600">Despachados: ${globalDespachados.toLocaleString()} p.</span> | <span class="font-bold text-emerald-600">Reparados: ${globalReparados.toLocaleString()} p.</span>`;
         }
 
+        // SOLUCIÓN: FUNCIÓN DE REPARADOS ROBUSTA (Mismo Fallback que Balance Mensual)
         function renderReparados() {
             if (chartReparadosObjs.length) chartReparadosObjs.forEach(c => c.destroy());
             chartReparadosObjs = [];
@@ -1000,25 +989,43 @@
             if (!cRep) return;
 
             const repPorMes = {};
-            const currentYear = new Date().getFullYear(); 
+            const currentYear = new Date().getFullYear();
+            const currentMonthNum = new Date().getMonth() + 1; 
+            const mesesIndex = { 'enero':1, 'febrero':2, 'marzo':3, 'abril':4, 'mayo':5, 'junio':6, 'julio':7, 'agosto':8, 'septiembre':9, 'octubre':10, 'noviembre':11, 'diciembre':12 };
+            const nombreMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
             DB_REPARACIONES.forEach(item => {
                 const sName = getFlujoStatus(item).id;
+                
                 if (sName !== 'REPARADOS' && sName !== 'OK') return;
 
                 const vRep = item.pares_reparar || 0;
                 if (vRep === 0) return; 
 
-                const envC = String(item.fecha_envio_averias).toLowerCase(); const retC = String(item.fecha_retorno_averias).toLowerCase(); const mayC = String(item.fecha_reparacion_por_mayor).toLowerCase();
-                let dRet = null;
-                if (mayC !== '' && !mayC.includes('entregar')) dRet = parsearFecha(item.fecha_reparacion_por_mayor);
-                else if (envC !== '' && retC !== '' && !retC.includes('entregar')) dRet = parsearFecha(item.fecha_retorno_averias);
+                let m = (item.mes_texto || '').toLowerCase().trim();
+                let refYear = currentYear;
 
-                if (dRet && dRet.getFullYear() === currentYear) {
-                    const mRStr = dRet.toLocaleString('es-ES', { month: 'long', year: 'numeric' }).toUpperCase();
-                    const sRK = dRet.getFullYear() * 100 + dRet.getMonth();
+                // FALLBACK ROBUSTO: Exactamente igual al Balance Mensual.
+                // Si "mes_texto" está vacío o es inválido, toma la "Fecha de entrega O.C."
+                // El parámetro "true" asegura que si hay un rango (ej: 04/10 - 06/10), toma la segunda fecha.
+                if (!m || !mesesIndex[m]) {
+                    const dFecha = parsearFecha(item.fecha_entrega_orden, true);
+                    if (dFecha) {
+                        m = nombreMeses[dFecha.getMonth()].toLowerCase();
+                        refYear = dFecha.getFullYear();
+                    }
+                }
+
+                let mNum = mesesIndex[m];
+
+                // REQUISITO: Mostrar solo hasta el mes en curso del año actual (no futuros)
+                if (mNum && refYear === currentYear && mNum <= currentMonthNum) {
+                    const sRK = currentYear * 100 + mNum; 
+                    const mRStr = m.toUpperCase() + " DE " + currentYear;
+                    
                     if (!repPorMes[sRK]) repPorMes[sRK] = { mes: mRStr, marcas: {} };
                     if (!repPorMes[sRK].marcas[item.marca||'N/D']) repPorMes[sRK].marcas[item.marca||'N/D'] = 0;
+                    
                     repPorMes[sRK].marcas[item.marca||'N/D'] += vRep;
                 }
             });
@@ -1039,17 +1046,56 @@
             let keysToRender = valFiltro === 'ALL' ? sortedKeys : [valFiltro];
 
             cRep.innerHTML = ''; 
-            if (!keysToRender.length) cRep.innerHTML = `<div class="flex items-center justify-center h-full"><span class="text-sm text-slate-400 italic">No hay datos reparados en ${currentYear}</span></div>`;
-            else {
-                const pal = ['#10b981', '#f59e0b', '#0ea5e9', '#ec4899', '#8b5cf6'];
+            if (!keysToRender.length) {
+                cRep.innerHTML = `<div class="flex items-center justify-center h-full"><span class="text-sm text-slate-400 italic">No hay datos reparados registrados bajo un mes válido hasta ahora en ${currentYear}</span></div>`;
+            } else {
+                const pal = ['#10b981', '#f59e0b', '#0ea5e9', '#ec4899', '#8b5cf6', '#14b8a6', '#f43f5e', '#a855f7', '#d946ef', '#06b6d4'];
                 keysToRender.forEach(sK => {
                     const mD = repPorMes[sK]; 
                     if(!mD) return;
-                    const lb = Object.keys(mD.marcas).sort(); const dt = lb.map(l => mD.marcas[l]);
+                    const lb = Object.keys(mD.marcas).sort(); 
+                    const dt = lb.map(l => mD.marcas[l]);
                     const cDiv = document.createElement('div'); cDiv.className = "w-full h-[200px] shrink-0 flex flex-col mb-4 border border-slate-100 rounded-lg p-3 bg-slate-50/50 break-inside-avoid shadow-sm chart-container";
-                    cDiv.innerHTML = `<h5 class="text-xs font-extrabold text-slate-600 uppercase mb-2 border-l-2 border-teal-500 pl-2 flex justify-between"><span>${mD.mes}</span><span class="text-teal-700">${dt.reduce((a,b)=>a+b,0).toLocaleString()} p.</span></h5><div class="relative flex-1 w-full"><canvas></canvas></div>`;
+                    cDiv.innerHTML = `<h5 class="text-xs font-extrabold text-slate-600 uppercase mb-2 border-l-2 border-teal-500 pl-2 flex justify-between"><span>${mD.mes}</span><span class="text-teal-700">TOT: ${dt.reduce((a,b)=>a+b,0).toLocaleString()} p.</span></h5><div class="relative flex-1 w-full"><canvas></canvas></div>`;
                     cRep.appendChild(cDiv);
-                    chartReparadosObjs.push(new Chart(cDiv.querySelector('canvas').getContext('2d'), { type: 'bar', data: { labels: lb, datasets: [{ data: dt, backgroundColor: lb.map((_, i) => pal[i % pal.length]), borderRadius: 3 }] }, options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 22 } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } }, plugins: { legend: { display: false } } }, plugins: [{ id: 'lTop', afterDatasetsDraw(c) { const ct = c.ctx; ct.font = 'bold 11px sans-serif'; ct.textAlign = 'center'; ct.textBaseline = 'bottom'; c.data.datasets[0].data.forEach((v, i) => { if (v > 0) { const b = c.getDatasetMeta(0).data[i]; ct.fillStyle = '#1e293b'; ct.fillText(v.toLocaleString(), b.x, b.y - 3); } }); } }] }));
+                    
+                    chartReparadosObjs.push(new Chart(cDiv.querySelector('canvas').getContext('2d'), { 
+                        type: 'bar', 
+                        data: { 
+                            labels: lb, 
+                            datasets: [{ 
+                                data: dt, 
+                                backgroundColor: lb.map((_, i) => pal[i % pal.length]), 
+                                borderRadius: 3 
+                            }] 
+                        }, 
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            layout: { padding: { top: 22 } }, 
+                            scales: { 
+                                y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } }, 
+                                x: { grid: { display: false }, ticks: { font: { size: 10, weight: 'bold' } } } 
+                            }, 
+                            plugins: { legend: { display: false } } 
+                        }, 
+                        plugins: [{ 
+                            id: 'lTop', 
+                            afterDatasetsDraw(c) { 
+                                const ct = c.ctx; 
+                                ct.font = 'bold 11px sans-serif'; 
+                                ct.textAlign = 'center'; 
+                                ct.textBaseline = 'bottom'; 
+                                c.data.datasets[0].data.forEach((v, i) => { 
+                                    if (v > 0) { 
+                                        const b = c.getDatasetMeta(0).data[i]; 
+                                        ct.fillStyle = '#1e293b'; 
+                                        ct.fillText(v.toLocaleString(), b.x, b.y - 3); 
+                                    } 
+                                }); 
+                            } 
+                        }] 
+                    }));
                 });
             }
         }
@@ -1107,7 +1153,7 @@
 
                 const cDiv = document.createElement('div');
                 cDiv.className = "w-full h-[200px] shrink-0 flex flex-col mb-4 border border-slate-100 rounded-lg p-3 bg-slate-50/50 break-inside-avoid shadow-sm chart-container";
-                cDiv.innerHTML = `<h5 class="text-xs font-extrabold text-slate-600 uppercase mb-2 border-l-2 border-sky-500 pl-2 flex justify-between"><span>${md.mes}</span><span class="text-sky-700">${tp.toLocaleString()} p.</span></h5><div class="relative flex-1 w-full"><canvas></canvas></div>`;
+                cDiv.innerHTML = `<h5 class="text-xs font-extrabold text-slate-600 uppercase mb-2 border-l-2 border-sky-500 pl-2 flex justify-between"><span>${md.mes}</span><span class="text-sky-700">TOT: ${tp.toLocaleString()} p.</span></h5><div class="relative flex-1 w-full"><canvas></canvas></div>`;
                 containerDespachos.appendChild(cDiv);
 
                 const ctx = cDiv.querySelector('canvas').getContext('2d');
@@ -1222,7 +1268,7 @@
                     cA.innerHTML += `<div class="col-span-full border-b border-slate-200 mt-4 pb-2"><h4 class="text-base font-bold text-slate-700 tracking-wider"><i data-lucide="calendar" class="w-5 h-5 inline-block mr-2"></i> ENTREGA: ${gData.mes}</h4></div>`;
                     
                     const gridCont = document.createElement('div');
-                    gridCont.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"; // 4 Columnas para hacerlas compactas
+                    gridCont.className = "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"; 
                     const gItems = gData.items.sort((a,b) => a.dLeft - b.dLeft);
                     
                     gItems.forEach(o => {
@@ -1234,7 +1280,6 @@
                         }
                         const ptC = o.pTotal > 0 ? Math.round(((o.pTotal - (o.pRep + o.pTaller)) / o.pTotal)*100) : 0;
                         
-                        // Diseño de tarjeta más compacta (letras más pequeñas y padding reducido)
                         gridCont.innerHTML += `
                         <div class="bg-white border ${bT} rounded-xl p-4 flex flex-col">
                             <div class="flex justify-between items-start mb-2">
@@ -1293,7 +1338,6 @@
 
             mesesContainers.forEach(container => {
                 const hasResults = aplicarFiltroEnContenedor(term, container);
-                // Ocultar el mes entero si no hay resultados en ese mes y se está buscando algo
                 if (term !== '' && !hasResults) {
                     container.classList.add('hidden');
                 } else {
@@ -1346,7 +1390,6 @@
                 let pPorReparar = 0;
                 let pEnReparacion = 0;
 
-                // FÓRMULAS EXACTAS
                 if (status === 'OK') {
                     pBuenEstado = pTotales; 
                 } else if (status === 'IMPORTACIONES EN TRANSITO POR REVISAR CALIDAD') {
@@ -1403,7 +1446,6 @@
                     const clientes = Object.keys(segmentObj).sort();
                     return clientes.map(cli => {
                         const dataCli = segmentObj[cli];
-                        // Ordenar OCs numéricamente
                         const ocs = Object.keys(dataCli.ocs).sort((a,b) => {
                             const nA = parseInt(a.replace(/\D/g, '')) || 0;
                             const nB = parseInt(b.replace(/\D/g, '')) || 0;
@@ -1445,7 +1487,6 @@
                             </div>
                         </div>
                         
-                        <!-- 5 Columnas, apilando la última -->
                         <div class="p-4 bg-white grid grid-cols-1 md:grid-cols-5 gap-3">
                             <div class="bg-emerald-50/70 border border-emerald-100 rounded-lg p-3 h-full flex flex-col">
                                 <div class="flex justify-between text-xs font-extrabold text-emerald-700 mb-3 border-b border-emerald-200/50 pb-2">
@@ -1472,7 +1513,6 @@
                                 <div class="text-purple-800 space-y-0.5 flex-1 overflow-visible max-h-[600px] overflow-y-auto">${renderList(mes.transito)}</div>
                             </div>
                             
-                            <!-- COLUMNA APILADA (Por Reparar y En Reparación) -->
                             <div class="flex flex-col gap-3 h-full">
                                 <div class="bg-amber-50/70 border border-amber-100 rounded-lg p-3 flex-1 flex flex-col min-h-[150px]">
                                     <div class="flex justify-between text-xs font-extrabold text-amber-700 mb-2 border-b border-amber-200/50 pb-2">
