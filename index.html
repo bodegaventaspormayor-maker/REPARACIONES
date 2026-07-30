@@ -336,6 +336,37 @@
                 <div id="container-indicadores-meses" class="flex flex-col gap-8"></div>
             </div>
 
+            <!-- ÓRDENES POSTERGADAS -->
+            <div class="bg-white p-6 rounded-xl border border-rose-200 shadow-sm mt-6 break-inside-avoid print-hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="history" class="w-5 h-5"></i></span>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base uppercase">Órdenes Postergadas</h3>
+                            <p class="text-sm text-slate-500">Órdenes no despachadas con fecha de entrega anterior al mes vigente.</p>
+                        </div>
+                    </div>
+                    <div class="relative w-full md:w-72">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                        <input type="text" id="filter-postergadas" oninput="renderOrdenesPostergadas()" placeholder="Buscar O.C. o Cliente..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-rose-500 font-medium">
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-slate-50 text-slate-500 uppercase font-bold border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3">F. Entrega</th>
+                                <th class="px-4 py-3">Cliente</th>
+                                <th class="px-4 py-3">O.C.</th>
+                                <th class="px-4 py-3">Marca</th>
+                                <th class="px-4 py-3 text-right">Pares Totales</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-postergadas" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- TABLA HISTÓRICA -->
             <div class="print-hidden bg-white p-5 rounded-xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4 items-end mt-6">
                 <div class="md:col-span-2">
@@ -412,7 +443,7 @@
         let chartFlujoObj = null;
         let chartReparadosObjs = [];
         let chartDespachosObjs = [];
-        let globalVelocidadTaller = 52; // Tasa por defecto
+        let globalVelocidadTaller = 52; 
 
         function setInnerText(id, text) {
             const el = document.getElementById(id);
@@ -607,7 +638,8 @@
                     mes_texto: getCSVValue(row, 'mes') || '',
                     status: statusRaw,
                     orden: getCSVValue(row, 'ordendecompra', 'orden', 'oc'),
-                    cliente: getCSVValue(row, 'cliente', 'tienda', 'cuenta', 'customer') || 'S/C'
+                    cliente: getCSVValue(row, 'cliente', 'tienda', 'cuenta', 'customer') || 'S/C',
+                    despachado: getCSVValue(row, 'despachado') || '' // Se captura la columna DESPACHADO
                 });
             }
         }
@@ -633,6 +665,7 @@
             renderResumenYAlertas();
             renderCuelloBotella();
             renderIndicadoresCumplimiento();
+            renderOrdenesPostergadas(); // Nueva llamada a la función de órdenes postergadas
             poblarFiltrosTabla();
             aplicarFiltrosTablaHistorica(); 
             lucide.createIcons();
@@ -1068,7 +1101,6 @@
                     const year = dObj.getFullYear();
                     const month = dObj.getMonth();
                     
-                    // MODIFICACIÓN: Filtrar para mostrar solo hasta el mes vigente (actual)
                     if (year > currentYearLimit || (year === currentYearLimit && month > currentMonthLimit)) {
                         return; 
                     }
@@ -1241,7 +1273,6 @@
                         }
                         const ptC = o.pTotal > 0 ? Math.round(((o.pTotal - (o.pRep + o.pTaller)) / o.pTotal)*100) : 0;
                         
-                        // Diseño de tarjeta más compacta (p-3 y textos reducidos)
                         gridCont.innerHTML += `
                         <div class="bg-white border ${bT} rounded-xl p-3 flex flex-col shadow-sm hover:shadow transition-shadow">
                             <div class="flex justify-between items-start mb-2">
@@ -1273,7 +1304,6 @@
 
             const TARGET_BRANDS = ['DEMOCRATA', 'SUA CIA', 'OFFLINE', 'MINI SUA CIA', 'SOFTLI', 'OLYMPIKUS'];
             
-            // 1. Obtener la tasa histórica de daños (TODOS LOS TIEMPOS) solo para las marcas objetivo
             let historialBrand = {};
             TARGET_BRANDS.forEach(b => historialBrand[b] = { importadosTotal: 0, repararTotal: 0 });
 
@@ -1292,7 +1322,6 @@
                 rates[b] = imp > 0 ? (rep / imp) : 0;
             });
 
-            // 2. Proyección por meses (Desde el siguiente mes en adelante)
             const currentD = new Date();
             let nextMonthYear = currentD.getFullYear();
             let nextMonth = currentD.getMonth() + 1;
@@ -1307,13 +1336,12 @@
                 if (!TARGET_BRANDS.includes(b)) return;
                 
                 const sObj = getFlujoStatus(r).id;
-                let dLimit = parsearFecha(r.fecha_entrega_orden, true); // True: Toma el rango final
+                let dLimit = parsearFecha(r.fecha_entrega_orden, true);
                 
-                if (!dLimit) return; // Se eliminan las columnas sin fecha / futuros lejanos
+                if (!dLimit) return;
                 
                 let mKey = dLimit.getFullYear() * 100 + dLimit.getMonth();
                 
-                // Lo vencido o del mes actual se arrastra al siguiente mes para que sea visible como riesgo inminente
                 if (mKey < nextMonthKey) {
                     mKey = nextMonthKey;
                 }
@@ -1342,44 +1370,36 @@
                 return;
             }
 
-            // Construcción del HTML (Matriz)
             let html = `<div class="flex flex-col min-w-max border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">`;
             
-            // CABECERA (Columnas de Meses)
             html += `<div class="flex bg-slate-50 border-b border-slate-200 sticky top-0 z-10">`;
             html += `<div class="w-48 shrink-0 p-3 flex items-center justify-center border-r border-slate-200"><span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-widest">MARCAS</span></div>`;
             sortedMonths.forEach(mK => {
                 html += `<div class="w-52 shrink-0 p-3 text-center border-r border-slate-200 last:border-0"><span class="text-xs font-extrabold text-indigo-700 flex items-center justify-center gap-1.5"><i data-lucide="calendar-clock" class="w-4 h-4"></i> ${monthData[mK].mesNombre}</span></div>`;
             });
-            html += `</div>`; // Fin Cabecera
+            html += `</div>`; 
 
-            // FILAS DE MARCAS
             TARGET_BRANDS.forEach((brand) => {
                 const brandRate = rates[brand];
-                
                 html += `<div class="flex border-b border-slate-100 hover:bg-slate-50/50 transition-colors">`;
                 
-                // Columna Izquierda (Info Marca)
                 html += `
                 <div class="w-48 shrink-0 p-3 border-r border-slate-200 flex flex-col justify-center">
                     <h5 class="text-sm font-extrabold text-slate-800">${brand}</h5>
                     <p class="text-[9px] font-bold text-slate-400 mb-2 uppercase">Tasa Hist. Daño: ${(brandRate*100).toFixed(1)}%</p>
                 </div>`;
 
-                // Columnas Derecha (Meses)
                 sortedMonths.forEach(mK => {
                     const mInfo = monthData[mK].brands[brand];
                     const llegan = mInfo.llegan;
                     const proyectado = Math.round(llegan * brandRate);
                     const bodega = mInfo.bodega;
                     
-                    // Escala de barras suave (Max estático para proporción visual 2000)
                     const maxScale = 2000;
                     const wLl = Math.min(100, (llegan/maxScale)*100);
                     const wPr = Math.min(100, (proyectado/maxScale)*100);
                     const wBo = Math.min(100, (bodega/maxScale)*100);
 
-                    // Colores suaves pasteles con textos oscuros slate-900
                     html += `
                     <div class="w-52 shrink-0 p-3 flex flex-col justify-center gap-1.5 border-r border-slate-100 last:border-0">
                         <div class="flex items-center justify-between text-[9px] font-bold"><span class="text-blue-600 w-12 uppercase">LLEGAN</span>
@@ -1396,10 +1416,9 @@
                         </div>
                     </div>`;
                 });
-                html += `</div>`; // Fin Fila Marca
+                html += `</div>`; 
             });
 
-            // FILA TOTALIZADORA INFERIOR (Total Riesgo = Proyectado + Bodega)
             html += `<div class="flex bg-slate-100/80 border-t border-slate-200">`;
             html += `<div class="w-48 shrink-0 p-3 border-r border-slate-200 flex items-center"><span class="text-xs font-extrabold text-slate-800 uppercase">TOTAL RIESGO (Aprox)</span></div>`;
             
@@ -1417,8 +1436,7 @@
                     <span class="px-3 py-1 rounded-full text-xs font-extrabold ${bgAlert} shadow-sm"><i data-lucide="alert-triangle" class="w-3 h-3 inline-block mr-1"></i> ${totalRiesgoMes.toLocaleString()} p.</span>
                 </div>`;
             });
-            html += `</div>`; // Fin Fila Total
-            html += `</div>`; // Fin Contenedor Flex
+            html += `</div></div>`; 
 
             container.innerHTML = html;
             lucide.createIcons();
@@ -1440,9 +1458,8 @@
                 if (!limitD) return;
 
                 const mesKey = limitD.getFullYear() * 100 + limitD.getMonth();
-                if (mesKey < currentMonthKey) return; // Solo mes actual y futuros
+                if (mesKey < currentMonthKey) return; 
 
-                // Filtro de Búsqueda
                 if (searchVal) {
                     const matchOC = (item.orden || '').toLowerCase().includes(searchVal);
                     const matchCli = (item.cliente || '').toLowerCase().includes(searchVal);
@@ -1562,7 +1579,6 @@
                             </div>
                         </div>
                         
-                        <!-- REJILLA DE 5 COLUMNAS -->
                         <div class="p-4 bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
                             <div class="bg-emerald-50/70 border border-emerald-100 rounded-lg p-2.5 h-full flex flex-col max-h-[350px]">
                                 <div class="flex justify-between text-[11px] font-extrabold text-emerald-700 mb-2 border-b border-emerald-200/50 pb-2">
@@ -1592,7 +1608,6 @@
                                 <div class="text-purple-900 flex-1 overflow-y-auto custom-scrollbar pr-1 relative">${renderNested(mes.transito)}</div>
                             </div>
 
-                            <!-- APILADOS: POR REPARAR Y EN REPARACION -->
                             <div class="flex flex-col gap-3 h-full max-h-[350px]">
                                 <div class="bg-amber-50/70 border border-amber-100 rounded-lg p-2.5 flex-1 flex flex-col min-h-0">
                                     <div class="flex justify-between text-[10px] font-extrabold text-amber-700 mb-1.5 border-b border-amber-200/50 pb-1">
@@ -1612,6 +1627,81 @@
                 `;
             });
             lucide.createIcons();
+        }
+
+        // --- STREAMING_CHUNK:Renderizando tabla de Órdenes Postergadas... ---
+        function renderOrdenesPostergadas() {
+            const tbody = document.getElementById('table-postergadas');
+            const searchVal = (document.getElementById('filter-postergadas')?.value || '').toLowerCase().trim();
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const currentD = new Date();
+            const currentMonthKey = currentD.getFullYear() * 100 + currentD.getMonth();
+            let postergadasData = [];
+
+            DB_REPARACIONES.forEach(item => {
+                // Solo aquellas marcadas como NO en la columna Despachado
+                if ((item.despachado || '').toUpperCase() !== 'NO') return; 
+
+                // Extraemos la fecha tope del rango
+                const dLimit = parsearFecha(item.fecha_entrega_orden, true); 
+                if (!dLimit) return;
+
+                const mesKey = dLimit.getFullYear() * 100 + dLimit.getMonth();
+                
+                // La orden debe ser anterior al mes vigente actual (Julio 2026 o el que sea en curso)
+                if (mesKey >= currentMonthKey) return; 
+
+                // Filtro de texto superior (O.C. o Cliente)
+                if (searchVal) {
+                    const matchOC = (item.orden || '').toLowerCase().includes(searchVal);
+                    const matchCli = (item.cliente || '').toLowerCase().includes(searchVal);
+                    if (!matchOC && !matchCli) return;
+                }
+
+                postergadasData.push({
+                    fecha_raw: item.fecha_entrega_orden,
+                    fecha_limite: dLimit,
+                    cliente: item.cliente || 'SIN CLIENTE',
+                    orden: item.orden || 'S/O',
+                    marca: item.marca || 'N/D',
+                    pares: item.pares || 0
+                });
+            });
+
+            // Agrupamos la info en caso de que existan varias filas (SKUs) de la misma orden y marca
+            let agrupado = {};
+            postergadasData.forEach(p => {
+                let key = `${p.orden}_${p.cliente}_${p.marca}_${p.fecha_raw}`;
+                if (!agrupado[key]) {
+                    agrupado[key] = { ...p };
+                } else {
+                    agrupado[key].pares += p.pares;
+                }
+            });
+
+            let finalData = Object.values(agrupado);
+            
+            // Ordenamos por antigüedad (fecha límite más antigua arriba)
+            finalData.sort((a, b) => a.fecha_limite - b.fecha_limite);
+
+            if (finalData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-slate-400 italic">No hay órdenes postergadas que coincidan con la búsqueda.</td></tr>';
+                return;
+            }
+
+            finalData.forEach(o => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-slate-100 hover:bg-rose-50/50 transition-colors">
+                        <td class="px-4 py-3 font-bold text-rose-600 whitespace-nowrap">${formatStrDDMMYYYY(o.fecha_raw)}</td>
+                        <td class="px-4 py-3 text-slate-800 font-medium uppercase">${o.cliente}</td>
+                        <td class="px-4 py-3 font-extrabold text-slate-700">${o.orden}</td>
+                        <td class="px-4 py-3 text-slate-500 font-bold uppercase">${o.marca}</td>
+                        <td class="px-4 py-3 text-right font-extrabold text-slate-800 bg-rose-50/30">${o.pares.toLocaleString()} p.</td>
+                    </tr>
+                `;
+            });
         }
 
         // --- STREAMING_CHUNK:Lógica Tabla Histórica y Exportación... ---
