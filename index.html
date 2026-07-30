@@ -318,24 +318,6 @@
                 <div id="container-alertas-meses" class="flex flex-col gap-6 mt-4"></div>
             </div>
 
-            <!-- INDICADORES DE CUMPLIMIENTO POR MES -->
-            <div class="bg-white p-6 rounded-xl border border-indigo-100 shadow-sm mt-6 break-inside-avoid print-hidden">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
-                    <div class="flex items-center gap-3">
-                        <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="target" class="w-5 h-5"></i></span>
-                        <div>
-                            <h3 class="font-extrabold text-slate-900 text-base uppercase">Indicadores de Cumplimiento por Mes</h3>
-                            <p class="text-sm text-slate-500">Detalle de avance por cliente y O.C. (Incluye tránsito).</p>
-                        </div>
-                    </div>
-                    <div class="relative w-full md:w-72">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-                        <input type="text" id="filter-indicadores-oc" oninput="renderIndicadoresCumplimiento()" placeholder="Buscar O.C. o Cliente..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium">
-                    </div>
-                </div>
-                <div id="container-indicadores-meses" class="flex flex-col gap-8"></div>
-            </div>
-
             <!-- ÓRDENES POSTERGADAS -->
             <div class="bg-white p-6 rounded-xl border border-rose-200 shadow-sm mt-6 break-inside-avoid print-hidden">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
@@ -365,6 +347,24 @@
                         <tbody id="table-postergadas" class="divide-y divide-slate-100 text-slate-700"></tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- INDICADORES DE CUMPLIMIENTO POR MES -->
+            <div class="bg-white p-6 rounded-xl border border-indigo-100 shadow-sm mt-6 break-inside-avoid print-hidden">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
+                    <div class="flex items-center gap-3">
+                        <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="target" class="w-5 h-5"></i></span>
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base uppercase">Indicadores de Cumplimiento por Mes</h3>
+                            <p class="text-sm text-slate-500">Detalle de avance por cliente y O.C. (Incluye tránsito).</p>
+                        </div>
+                    </div>
+                    <div class="relative w-full md:w-72">
+                        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                        <input type="text" id="filter-indicadores-oc" oninput="renderIndicadoresCumplimiento()" placeholder="Buscar O.C. o Cliente..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium">
+                    </div>
+                </div>
+                <div id="container-indicadores-meses" class="flex flex-col gap-8"></div>
             </div>
 
             <!-- TABLA HISTÓRICA -->
@@ -664,8 +664,8 @@
             renderEficienciaMensual();
             renderResumenYAlertas();
             renderCuelloBotella();
-            renderIndicadoresCumplimiento();
             renderOrdenesPostergadas(); // Nueva llamada a la función de órdenes postergadas
+            renderIndicadoresCumplimiento();
             poblarFiltrosTabla();
             aplicarFiltrosTablaHistorica(); 
             lucide.createIcons();
